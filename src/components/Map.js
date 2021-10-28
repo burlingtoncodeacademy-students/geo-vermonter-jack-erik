@@ -1,8 +1,14 @@
 import { MapContainer, TileLayer, Polygon, Marker, Polyline } from "react-leaflet";
 import borderData from "../data/border";
+// import leafletPip from "@mapbox/leaflet-pip"
+// import L from "leaflet";
 
 function Map(props) {
   let vtOutline = borderData.geometry.coordinates[0].map(coords => [coords[1], coords[0]])
+
+  //console.log(leafletPip.pointInLayer([72, -45], L.Layer(vtOutline), true));
+
+  
 
   return (
     <MapContainer
@@ -23,6 +29,7 @@ function Map(props) {
         positions={vtOutline}
         pathOptions={{ color: "orange", fillOpacity: 0 }}
       />
+      {<Polyline positions={props.positions} pathOptions={props.pathOptions}/>}
     </MapContainer>
   );
 }

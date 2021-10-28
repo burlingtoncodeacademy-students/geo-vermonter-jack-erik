@@ -1,0 +1,7 @@
+1. choose a random lat/long position within VT 
+
+2. center the map at that position and lock zoom at 18
+
+3. use geocoding to look up town and county based on current position
+
+4. map navigation, updating currentPosition variable and score variable
