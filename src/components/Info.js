@@ -7,7 +7,7 @@ function Info(props) {
         <p>Latitude: {props.lat}</p>
         <p>Longitude: {props.long}</p>
         <p>County: {props.county}</p>
-        <p>Village: {props.village}</p>
+        <p>Village: {props.village ? props.village : 'No village available'}</p>
         <p>Score: {props.score}</p>
       </div>
     );

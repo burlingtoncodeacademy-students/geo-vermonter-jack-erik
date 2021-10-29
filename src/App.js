@@ -15,7 +15,10 @@ function App(props) {
 
   const [poly, setPoly] = useState([center]);
 
+  const [zoom, setZoom] = useState(8);
+
   // stateful props for tracking county and village
+
   const [county, setCounty] = useState('');
   const [village, setVillage] = useState('');
 
@@ -27,9 +30,16 @@ function App(props) {
   const [guessButton, setGuessButton] = useState("disabled");
   const [quitButton, setQuitButton] = useState("disabled");
   const [startButton, setStartButton] = useState("");
+  const [goBackButton, setGoBackButton] = useState('disabled')
 
   // setting up score 
-  const [score, setScore] = useState(0)
+  const [score, setScore] = useState(100)
+
+  const [answer, setAnswer] = useState('not set')
+
+  function handleAnswer (evt) {
+    setAnswer(evt.target.value);
+  };
 
   // use geocoding to lookup town and county, set them to stateful props
   function findCounty() {
@@ -52,7 +62,9 @@ function App(props) {
     setQuitButton("");
     setGuessButton("");
     setStartButton("disabled");
+    setGoBackButton("")
     setInfoEnabled(false)
+    setZoom(18)
 
     // enable nav
 
@@ -67,13 +79,20 @@ function App(props) {
     setStartButton("");
     setGuessButton("disabled");
     setQuitButton("disabled");
-    setInfoEnabled(true);
+    setGoBackButton("disabled")
+
     // display lat and long position inside info panel
     // display town & county inside info panel
+    setInfoEnabled(true);
+    setZoom(10);
 
     findCounty();
     console.log("county: " + county)
     console.log("village: " + village)
+  }
+
+  function goBack() {
+    setCenter(poly[0])
   }
 
   // open or close modal dialog
@@ -86,6 +105,17 @@ function App(props) {
       setGuessButton("");
     }
   }
+
+  function modalSubmit() {
+    console.log('guess submitted')
+    if (answer !== county) {
+      console.log('incorrect')
+    } else {
+      console.log('correct')
+    }
+  }
+
+  
 
   function northHandle() {
     setPoly(poly => [...poly, [center[0] + .02, center[1]]])
@@ -119,15 +149,17 @@ function App(props) {
       <button onClick={modalUpdater} disabled={guessButton}>
         Guess
       </button>
+      <button onClick={goBack} disabled={goBackButton}>Return</button>
       <button onClick={quit} disabled={quitButton}>
         Quit
       </button>
-      <Modal modalIsOpen={modalIsOpen} modalUpdater={modalUpdater} />
-      <Map center={center} positions={poly} pathOptions={maroonOptions}/>
+      <Modal modalIsOpen={modalIsOpen} modalUpdater={modalUpdater} modalSubmit={modalSubmit} handleAnswer={handleAnswer} answer={answer}/>
+      <Map center={center} positions={poly} pathOptions={maroonOptions} zoom={zoom}/>
       <North northHandle={northHandle}/>
       <South southHandle={southHandle}/>
       <East eastHandle={eastHandle}/>
       <West westHandle={westHandle}/>
+      
     </div>
   );
 }

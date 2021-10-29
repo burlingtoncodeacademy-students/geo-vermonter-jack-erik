@@ -1,7 +1,18 @@
-1. choose a random lat/long position within VT 
+1. Random spot - #2
 
-2. center the map at that position and lock zoom at 18
+2. set 'no village' if no village
+set initial score at 100
 
-3. use geocoding to look up town and county based on current position
+add 'return' button -> set center at first index of poly array
 
-4. map navigation, updating currentPosition variable and score variable
+3. modal box
+- add guess button, change 'close' to 'cancel'
+- add list of counties (radio button or check box, allow one only)
+
+- correct guess -> fill in info boxes, alert 'Correct!', reset game
+
+- incorrect guess -> -10 points, alert 'Wrong!', close modal
+
+4. modularize movement buttons
+-  -1 point per move
+
