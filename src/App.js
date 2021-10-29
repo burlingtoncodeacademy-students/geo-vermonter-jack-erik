@@ -4,10 +4,7 @@ import { useState } from "react";
 import Map from "./components/Map";
 import Modal from "./components/Modal";
 import Info from "./components/Info"
-import North from './components/North'
-import South from './components/South'
-import East from './components/East'
-import West from './components/West'
+import MovementButton from "./components/MovementButton";
 
 function App(props) {
   const [center, setCenter] = useState([43.88, -72.7317]);
@@ -29,7 +26,7 @@ function App(props) {
   const [startButton, setStartButton] = useState("");
 
   // setting up score 
-  const [score, setScore] = useState(0)
+  const [score, setScore] = useState(100)
 
   // use geocoding to lookup town and county, set them to stateful props
   function findCounty() {
@@ -87,25 +84,37 @@ function App(props) {
     }
   }
 
-  function northHandle() {
-    setPoly(poly => [...poly, [center[0] + .02, center[1]]])
-    setCenter([center[0] + .02, center[1]])
+  function movementHandle(direction) {
+      let coordinates = [];
+      switch(direction) {
+        case "north":
+          coordinates = [center[0] + .02, center[1]]
+          break;
+        case "south":
+          coordinates = [center[0] - .02, center[1]]
+          break;
+        case "east":
+          coordinates = [center[0], center[1] + .02]
+          break;
+        case "west":
+          coordinates = [center[0], center[1] - .02]
+          break;
+        default:
+          console.log("Uh oh");     
+      }
 
-  }
+      if (coordinates !== []) {
+        setScore(score - 10)
+        setPoly(poly => [...poly, coordinates])
+        setCenter(coordinates)   
 
-  function southHandle() {
-    setPoly(poly => [...poly, [center[0] - .02, center[1]]])
-    setCenter([center[0] - .02, center[1]])
-  }
+        console.log(score);
+      }
+      else {
+        console.log("reached this")
+        return null
+      }  
 
-  function eastHandle() {
-    setPoly(poly => [...poly, [center[0], center[1] + .02]])
-    setCenter([center[0], center[1] + .02])
-  }
-
-  function westHandle() {
-    setPoly(poly => [...poly, [center[0], center[1] - .02]])
-    setCenter([center[0], center[1] - .02])
   }
 
   const maroonOptions = { color: "maroon" }
@@ -124,10 +133,10 @@ function App(props) {
       </button>
       <Modal modalIsOpen={modalIsOpen} modalUpdater={modalUpdater} />
       <Map center={center} positions={poly} pathOptions={maroonOptions}/>
-      <North northHandle={northHandle}/>
-      <South southHandle={southHandle}/>
-      <East eastHandle={eastHandle}/>
-      <West westHandle={westHandle}/>
+      <MovementButton movementHandle={movementHandle} direction="north"/>
+      <MovementButton movementHandle={movementHandle} direction="south"/>
+      <MovementButton movementHandle={movementHandle} direction="east"/>
+      <MovementButton movementHandle={movementHandle} direction="west"/>
     </div>
   );
 }
