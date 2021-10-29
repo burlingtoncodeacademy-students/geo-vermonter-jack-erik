@@ -1,14 +1,24 @@
 import { MapContainer, TileLayer, Polygon, Marker, Polyline } from "react-leaflet";
 import borderData from "../data/border";
 import ChangeView from "./ChangeView";
-
-// import leafletPip from "@mapbox/leaflet-pip"
-// import L from "leaflet";
+import leafletPip from "@mapbox/leaflet-pip"
+import L from "leaflet";
 
 function Map(props) {
   let vtOutline = borderData.geometry.coordinates[0].map(coords => [coords[1], coords[0]])
 
-  //console.log(leafletPip.pointInLayer([72, -45], L.Layer(vtOutline), true));
+  // console.log(leafletPip);
+  // console.log(L);
+  //console.log(vtOutline);
+
+  let vtData = L.geoJSON(vtOutline)
+  let results = leafletPip.pointInLayer([props.center], vtData)
+
+  console.log(props.center)
+  console.log(results)
+
+  console.log(results);
+
 
   
 

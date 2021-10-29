@@ -4,10 +4,7 @@ import { useState } from "react";
 import Map from "./components/Map";
 import Modal from "./components/Modal";
 import Info from "./components/Info"
-import North from './components/North'
-import South from './components/South'
-import East from './components/East'
-import West from './components/West'
+import MovementButton from "./components/MovementButton";
 
 function App(props) {
   const [center, setCenter] = useState([43.88, -72.7317]);
@@ -115,27 +112,37 @@ function App(props) {
     }
   }
 
-  
+  function movementHandle(direction) {
+      let coordinates = [];
+      switch(direction) {
+        case "north":
+          coordinates = [center[0] + .02, center[1]]
+          break;
+        case "south":
+          coordinates = [center[0] - .02, center[1]]
+          break;
+        case "east":
+          coordinates = [center[0], center[1] + .02]
+          break;
+        case "west":
+          coordinates = [center[0], center[1] - .02]
+          break;
+        default:
+          console.log("Uh oh");     
+      }
 
-  function northHandle() {
-    setPoly(poly => [...poly, [center[0] + .02, center[1]]])
-    setCenter([center[0] + .02, center[1]])
+      if (coordinates !== []) {
+        setScore(score - 10)
+        setPoly(poly => [...poly, coordinates])
+        setCenter(coordinates)   
 
-  }
+        console.log(score);
+      }
+      else {
+        console.log("reached this")
+        return null
+      }  
 
-  function southHandle() {
-    setPoly(poly => [...poly, [center[0] - .02, center[1]]])
-    setCenter([center[0] - .02, center[1]])
-  }
-
-  function eastHandle() {
-    setPoly(poly => [...poly, [center[0], center[1] + .02]])
-    setCenter([center[0], center[1] + .02])
-  }
-
-  function westHandle() {
-    setPoly(poly => [...poly, [center[0], center[1] - .02]])
-    setCenter([center[0], center[1] - .02])
   }
 
   const maroonOptions = { color: "maroon" }
@@ -153,13 +160,15 @@ function App(props) {
       <button onClick={quit} disabled={quitButton}>
         Quit
       </button>
+
       <Modal modalIsOpen={modalIsOpen} modalUpdater={modalUpdater} modalSubmit={modalSubmit} handleAnswer={handleAnswer} answer={answer}/>
       <Map center={center} positions={poly} pathOptions={maroonOptions} zoom={zoom}/>
-      <North northHandle={northHandle}/>
-      <South southHandle={southHandle}/>
-      <East eastHandle={eastHandle}/>
-      <West westHandle={westHandle}/>
-      
+
+
+      <MovementButton movementHandle={movementHandle} direction="north"/>
+      <MovementButton movementHandle={movementHandle} direction="south"/>
+      <MovementButton movementHandle={movementHandle} direction="east"/>
+      <MovementButton movementHandle={movementHandle} direction="west"/>
     </div>
   );
 }
