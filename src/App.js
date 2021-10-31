@@ -1,10 +1,3 @@
-// notes for merge:
-// removed errant console logs
-
-// remove north, south, east, west.js?
-// remove app-jack
-// remove line 13 in map.js
-
 import "./App.css";
 import { useState } from "react";
 
@@ -19,27 +12,32 @@ function App(props) {
   // prop for opening and closing modal
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const [poly, setPoly] = useState([center]);
+  // Stateful array of points traveled to
+  const [poly, setPoly] = useState([]);
+
+  // Stateful variable for the zoom value of the map
   const [zoom, setZoom] = useState(8);
 
   // stateful props for tracking county and village
-
-  const [county, setCounty] = useState("");
-  const [village, setVillage] = useState("");
+  const [county, setCounty] = useState('');
+  const [village, setVillage] = useState('');
 
   // // stateful props for position
 
-  const [infoEnabled, setInfoEnabled] = useState(false);
+  const [infoEnabled, setInfoEnabled] = useState(false)
 
   // setting up menu button enabling / disabling
   const [guessButton, setGuessButton] = useState("disabled");
   const [quitButton, setQuitButton] = useState("disabled");
   const [startButton, setStartButton] = useState("");
-  const [goBackButton, setGoBackButton] = useState("disabled");
-  const [navButton, setNavButton] = useState("disabled");
+  const [goBackButton, setGoBackButton] = useState('disabled');
+  const [navButton, setNavButton] = useState('disabled');
 
-  // setting up score
-  const [score, setScore] = useState(100);
+  // setting up score 
+  const [score, setScore] = useState(100)
+
+  // start boolean
+  const [start, setStart] = useState(false)
 
   // setting up answer, & function to pass that sets it
   const [answer, setAnswer] = useState("Not set");
@@ -69,8 +67,7 @@ function App(props) {
 
   // function for main gameplay
   function startGame() {
-    // updating county & village
-    findCounty();
+    
     // disabling/enabling buttons
     setNavButton("");
     setQuitButton("");
@@ -78,9 +75,24 @@ function App(props) {
     setStartButton("disabled");
     setGoBackButton("");
 
+    // reset score if replaying game
+    setScore(100);
+
+    // empty poly array (movement history) if replaying game
+    setPoly([])
+
+    // set initial map parameters
+    setZoom(18)
+    setStart(true)
+    setCenter([(Math.random() * (45.005419 - 42.730315) + 42.730315), (Math.random() * (-71.510225 - -73.35218) + -73.35218)])
+    console.log("center: " + center)
+
     // disable info display, set zoom
-    setInfoEnabled(false);
+    setInfoEnabled(true);
     setZoom(18);
+
+    // updating county & village
+    findCounty();
   }
 
   // giving up / displaying answer
@@ -88,7 +100,9 @@ function App(props) {
     setStartButton("");
     setGuessButton("disabled");
     setQuitButton("disabled");
-    setGoBackButton("disabled");
+    setGoBackButton("disabled")
+    setNavButton("disabled");
+    setStart(false)
 
     // update county & village props
     findCounty();
@@ -118,6 +132,7 @@ function App(props) {
 
   // checking answer and routing to appropriate actions
   function modalSubmit() {
+    findCounty();
     if (answer !== county) {
       setScore(score - 10);
       alert("Incorrect answer!");
@@ -125,38 +140,56 @@ function App(props) {
     } else {
       alert(`Correct answer! Final score: ${score}`);
       setInfoEnabled(true);
+
+      // reset buttons to replay game if desired
+      setStartButton("")
+      setNavButton("disabled")
+      setGuessButton("disabled")
+      setGoBackButton("disabled")
+      setQuitButton("disabled")
+
+      // close modal
       modalUpdater();
       setZoom(8);
     }
   }
 
+
+  // Moves the center markers coordinates around the map
   function movementHandle(direction) {
-    let coordinates = [];
-    switch (direction) {
-      case "North":
-        coordinates = [center[0] + 0.02, center[1]];
-        break;
-      case "South":
-        coordinates = [center[0] - 0.02, center[1]];
-        break;
-      case "East":
-        coordinates = [center[0], center[1] + 0.02];
-        break;
-      case "West":
-        coordinates = [center[0], center[1] - 0.02];
-        break;
-      default:
-        console.log("Uh oh");
-    }
+      let coordinates = [];
+      // Adjusts coordinates given whatever the entered direction was
+      switch(direction) {
+        // Adjusts score and coordinates
+        case "North":
+          setScore(score - 1)
+          coordinates = [center[0] + .02, center[1]]
+          break;
+        case "South":
+          setScore(score - 1)
+          coordinates = [center[0] - .02, center[1]]
+          break;
+        case "East":
+          setScore(score - 1)
+          coordinates = [center[0], center[1] + .02]
+          break;
+        case "West":
+          setScore(score - 1)
+          coordinates = [center[0], center[1] - .02]
+          break;
+        default:
+          console.log("Uh oh");     
+      }
 
-    if (coordinates !== []) {
-      setScore(score - 1);
-      setPoly((poly) => [...poly, coordinates]);
-      setCenter(coordinates);
-
-    } else {
-      return null;
-    }
+      if (coordinates !== []) {
+        // Takes old poly array and pushes the coordinates to it
+        setPoly(poly => [...poly, coordinates])
+        // Recenters the marker
+        setCenter(coordinates)   
+      }
+      else {
+        return null
+      }  
   }
 
   const maroonOptions = { color: "maroon" };
@@ -196,6 +229,8 @@ function App(props) {
           positions={poly}
           pathOptions={maroonOptions}
           zoom={zoom}
+          start={start}
+          setCenter={setCenter}  
         />
         <Info id="info-panel"
           score={score}
