@@ -10,27 +10,32 @@ function App(props) {
   const [center, setCenter] = useState([43.88, -72.7317]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const [poly, setPoly] = useState([center]);
+  // Stateful array of points traveled to
+  const [poly, setPoly] = useState([]);
 
+  // Stateful variable for the zoom value of the map
   const [zoom, setZoom] = useState(8);
 
   // stateful props for tracking county and village
-
   const [county, setCounty] = useState('');
   const [village, setVillage] = useState('');
 
   // // stateful props for position
 
-  const [infoEnabled, setInfoEnabled] = useState(false)
+  const [infoEnabled, setInfoEnabled] = useState(true)
 
   // setting up menu button enabling / disabling
   const [guessButton, setGuessButton] = useState("disabled");
   const [quitButton, setQuitButton] = useState("disabled");
   const [startButton, setStartButton] = useState("");
-  const [goBackButton, setGoBackButton] = useState('disabled')
+  const [goBackButton, setGoBackButton] = useState('disabled');
+  const [movementButton, setMovementButton] = useState('disabled');
 
   // setting up score 
   const [score, setScore] = useState(100)
+
+  // start boolean
+  const [start, setStart] = useState(false)
 
   const [answer, setAnswer] = useState('not set')
 
@@ -60,8 +65,11 @@ function App(props) {
     setGuessButton("");
     setStartButton("disabled");
     setGoBackButton("")
-    setInfoEnabled(false)
+    setMovementButton("");
+    setInfoEnabled(true)
     setZoom(18)
+    setStart(true)
+    setCenter([(Math.random() * (45.005419 - 42.730315) + 42.730315), (Math.random() * (-71.510225 - -73.35218) + -73.35218)])
 
     // enable nav
 
@@ -77,6 +85,8 @@ function App(props) {
     setGuessButton("disabled");
     setQuitButton("disabled");
     setGoBackButton("disabled")
+    setMovementButton("disabled");
+    setStart(false)
 
     // display lat and long position inside info panel
     // display town & county inside info panel
@@ -112,19 +122,27 @@ function App(props) {
     }
   }
 
+
+  // Moves the center markers coordinates around the map
   function movementHandle(direction) {
       let coordinates = [];
+      // Adjusts coordinates given whatever the entered direction was
       switch(direction) {
+        // Adjusts score and coordinates
         case "north":
+          setScore(score - 1)
           coordinates = [center[0] + .02, center[1]]
           break;
         case "south":
+          setScore(score - 1)
           coordinates = [center[0] - .02, center[1]]
           break;
         case "east":
+          setScore(score - 1)
           coordinates = [center[0], center[1] + .02]
           break;
         case "west":
+          setScore(score - 1)
           coordinates = [center[0], center[1] - .02]
           break;
         default:
@@ -132,19 +150,18 @@ function App(props) {
       }
 
       if (coordinates !== []) {
-        setScore(score - 10)
+        // Takes old poly array and pushes the coordinates to it
         setPoly(poly => [...poly, coordinates])
+        // Recenters the marker
         setCenter(coordinates)   
-
-        console.log(score);
       }
       else {
-        console.log("reached this")
         return null
       }  
 
   }
 
+  // Sets line color to maroon
   const maroonOptions = { color: "maroon" }
 
   return (
@@ -162,13 +179,13 @@ function App(props) {
       </button>
 
       <Modal modalIsOpen={modalIsOpen} modalUpdater={modalUpdater} modalSubmit={modalSubmit} handleAnswer={handleAnswer} answer={answer}/>
-      <Map center={center} positions={poly} pathOptions={maroonOptions} zoom={zoom}/>
+      <Map start={start} center={center} setCenter={setCenter} positions={poly} pathOptions={maroonOptions} zoom={zoom}/>
 
 
-      <MovementButton movementHandle={movementHandle} direction="north"/>
-      <MovementButton movementHandle={movementHandle} direction="south"/>
-      <MovementButton movementHandle={movementHandle} direction="east"/>
-      <MovementButton movementHandle={movementHandle} direction="west"/>
+      <MovementButton movementHandle={movementHandle} direction="north" disabled={movementButton}/>
+      <MovementButton movementHandle={movementHandle} direction="south" disabled={movementButton}/>
+      <MovementButton movementHandle={movementHandle} direction="east" disabled={movementButton}/>
+      <MovementButton movementHandle={movementHandle} direction="west" disabled={movementButton}/>
     </div>
   );
 }
