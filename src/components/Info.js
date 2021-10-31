@@ -3,22 +3,32 @@ import React from "react";
 function Info(props) {
   if (props.infoEnabled) {
     return (
-      <div>
-        <p>Latitude: {props.lat}</p>
-        <p>Longitude: {props.long}</p>
-        <p>County: {props.county}</p>
-        <p>Village: {props.village ? props.village : 'No village available'}</p>
-        <p>Score: {props.score}</p>
+      <div id="info-display">
+        <ul>
+          <li>Latitude: {props.lat}</li>
+          <li>Longitude: {props.long}</li>
+          <li>County: {props.county}</li>
+          <li>
+            Village: {props.village ? props.village : "No village available"}
+          </li>
+        </ul>
+        <ul>
+          <li>Score: {props.score}</li>
+        </ul>
       </div>
     );
   } else {
     return (
-      <div>
-        <p>Latitude: ?</p>
-        <p>Longitude: ?</p>
-        <p>County: ?</p>
-        <p>Village: ?</p>
-        <p>Score: {props.score}</p>
+      <div id="info-display">
+        <ul>
+          <li>Latitude: ?</li>
+          <li>Longitude: ?</li>
+          <li>County: ?</li>
+          <li>Village: ?</li>
+        </ul>
+        <ul>
+          <li>Score: {props.score}</li>
+        </ul>
       </div>
     );
   }

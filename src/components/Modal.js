@@ -1,129 +1,129 @@
 import React from "react";
-import { useState } from "react";
 
 function Modal(props) {
-//   let answer = "";
 
-//   let handleGuess = (evt) => {
-//     answer = evt.target.value;
-//     console.log(answer);
-//   };
-
+// check if modal should be open
   if (!props.modalIsOpen) {
     return null;
   } else {
     return (
+        // div for shaded background
       <div id="modal-background">
+          {/* // div for main modal display */}
         <div id="modal-box">
-          <h1>Pick a county:</h1>
-          <input
+          <h2>Pick a county:</h2>
+          {/* // radio boxes and labels for counties */}
+          <ul>
+          <li><input
             type="radio"
             name="county"
-            value="Addison"
+            value="Addison County"
             onChange={props.handleAnswer}
           />
-          <label for="Addison">Addison</label>
-           <input
+          <label for="Addison">Addison</label></li>
+          <li><input
             type="radio"
             name="county"
-            value="Bennington"
+            value="Bennington County"
             onChange={props.handleAnswer}
           />
-          <label for="Bennington">Bennington</label>
-          <input
+          <label for="Bennington">Bennington</label></li>
+          <li><input
             type="radio"
             name="county"
-            value="Caledonia"
+            value="Caledonia County"
             onChange={props.handleAnswer}
           />
-          <label for="Caledonia">Caledonia</label>
-          <input
+          <label for="Caledonia">Caledonia</label></li>
+          <li><input
             type="radio"
             name="county"
-            value="Chittenden"
+            value="Chittenden County"
             onChange={props.handleAnswer}
           />
-          <label for="Chittenden">Chittenden</label>
-          <input
+          <label for="Chittenden">Chittenden</label></li>
+          <li><input
             type="radio"
             name="county"
-            value="Essex"
+            value="Essex County"
             onChange={props.handleAnswer}
           />
-          <label for="Essex">Essex</label>
-          <input
+          <label for="Essex">Essex</label></li>
+          <li><input
             type="radio"
             name="county"
-            value="Franklin"
+            value="Franklin County"
             onChange={props.handleAnswer}
           />
-          <label for="Franklin">Franklin</label>
-          <input
+          <label for="Franklin">Franklin</label></li>
+          <li><input
             type="radio"
             name="county"
-            value="Grand Isle"
+            value="Grand Isle County"
             onChange={props.handleAnswer}
           />
-          <label for="Grand Isle">Grand Isle</label>
-          <input
+          <label for="Grand Isle">Grand Isle</label></li>
+          <li><input
             type="radio"
             name="county"
-            value="Lamoille"
+            value="Lamoille County"
             onChange={props.handleAnswer}
           />
-          <label for="Lamoille">Lamoille</label>
-          <input
+          <label for="Lamoille">Lamoille</label></li>
+          <li><input
             type="radio"
             name="county"
-            value="Orange"
+            value="Orange County" 
             onChange={props.handleAnswer}
           />
-          <label for="Orange">Orange</label>
-          <input
+          <label for="Orange">Orange</label></li>
+          <li><input
             type="radio"
             name="county"
-            value="Orleans"
+            value="Orleans County"
             onChange={props.handleAnswer}
           />
-          <label for="Orleans">Orleans</label>
-          <input
+          <label for="Orleans">Orleans</label></li>
+          <li><input
             type="radio"
             name="county"
-            value="Rutland"
+            value="Rutland County"
             onChange={props.handleAnswer}
           />
-          <label for="Rutland">Rutland</label>
-          <input
+          <label for="Rutland">Rutland</label></li>
+          <li><input
             type="radio"
             name="county"
-            value="Washington"
+            value="Washington County"
             onChange={props.handleAnswer}
           />
-          <label for="Washington">Washington</label>
-          <input
+          <label for="Washington">Washington</label></li>
+          <li><input
             type="radio"
             name="county"
-            value="Windham"
+            value="Windham County"
             onChange={props.handleAnswer}
           />
-          <label for="Windham">Windham</label>
-          <input
+          <label for="Windham">Windham</label></li>
+          <li><input
             type="radio"
             name="county"
-            value="Windsor"
+            value="Windsor County"
             onChange={props.handleAnswer}
           />
-          <label for="Windsor">Windsor</label>
+          <label for="Windsor">Windsor</label></li>
+          </ul>
+        {/* // submit and cancel buttons */}
+        <div id="modal-menu">
+          <button className="button-modal" onClick={props.modalSubmit}>Submit</button>
+          <button className="button-modal" onClick={props.modalUpdater}>Cancel</button>
         </div>
-        <button onClick={props.modalSubmit}>Submit Guess</button>
-        <button onClick={props.modalUpdater}>Cancel</button>
-        <p id='guess-displey'>Your guess: {props.answer} County</p>
+        </div>
+
       </div>
 
     );
   }
-
-  // functions for guess and cancel (in parent/pass as props?)
 }
 
 export default Modal;
