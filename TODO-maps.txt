@@ -1,0 +1,18 @@
+1. Random spot - #2
+
+2. set 'no village' if no village
+set initial score at 100
+
+add 'return' button -> set center at first index of poly array
+
+3. modal box
+- add guess button, change 'close' to 'cancel'
+- add list of counties (radio button or check box, allow one only)
+
+- correct guess -> fill in info boxes, alert 'Correct!', reset game
+
+- incorrect guess -> -10 points, alert 'Wrong!', close modal
+
+4. modularize movement buttons
+-  -1 point per move
+
