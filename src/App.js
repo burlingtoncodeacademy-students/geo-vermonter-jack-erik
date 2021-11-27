@@ -6,7 +6,7 @@ import Modal from "./components/Modal";
 import Info from "./components/Info";
 import MovementButton from "./components/MovementButton";
 
-function App(props) {
+function App() {
   const [center, setCenter] = useState([43.88, -72.7317]);
 
   // prop for opening and closing modal
@@ -19,25 +19,22 @@ function App(props) {
   const [zoom, setZoom] = useState(8);
 
   // stateful props for tracking county and village
-  const [county, setCounty] = useState('');
-  const [village, setVillage] = useState('');
-
-  // // stateful props for position
-
-  const [infoEnabled, setInfoEnabled] = useState(false)
+  const [county, setCounty] = useState("");
+  const [village, setVillage] = useState("");
 
   // setting up menu button enabling / disabling
+  const [infoEnabled, setInfoEnabled] = useState(false);
   const [guessButton, setGuessButton] = useState("disabled");
   const [quitButton, setQuitButton] = useState("disabled");
   const [startButton, setStartButton] = useState("");
-  const [goBackButton, setGoBackButton] = useState('disabled');
-  const [navButton, setNavButton] = useState('disabled');
+  const [goBackButton, setGoBackButton] = useState("disabled");
+  const [navButton, setNavButton] = useState("disabled");
 
-  // setting up score 
-  const [score, setScore] = useState(100)
+  // setting up score
+  const [score, setScore] = useState(100);
 
   // start boolean
-  const [start, setStart] = useState(false)
+  const [start, setStart] = useState(false);
 
   // setting up answer, & function to pass that sets it
   const [answer, setAnswer] = useState("Not set");
@@ -47,7 +44,6 @@ function App(props) {
 
   // use geocoding to lookup town and county, set them to stateful props
   function findCounty() {
-
     fetch(
       "https://nominatim.openstreetmap.org/reverse.php?lat=" +
         center[0] +
@@ -67,7 +63,6 @@ function App(props) {
 
   // function for main gameplay
   function startGame() {
-    
     // disabling/enabling buttons
     setNavButton("");
     setQuitButton("");
@@ -78,17 +73,14 @@ function App(props) {
     // reset score if replaying game
     setScore(100);
 
-    // empty poly array (movement history) if replaying game
-    setPoly([])
-
     // set initial map parameters
-    setZoom(18)
-    setStart(true)
-    setCenter([(Math.random() * (45.005419 - 42.730315) + 42.730315), (Math.random() * (-71.510225 - -73.35218) + -73.35218)])
-    console.log("center: " + center)
+    setZoom(18);
+    setStart(true);
+    // setCenter([(Math.random() * (45.005419 - 42.730315) + 42.730315), (Math.random() * (-71.510225 - -73.35218) + -73.35218)])
+    // setPoly([])
 
     // disable info display, set zoom
-    setInfoEnabled(true);
+    setInfoEnabled(false);
     setZoom(18);
 
     // updating county & village
@@ -100,9 +92,18 @@ function App(props) {
     setStartButton("");
     setGuessButton("disabled");
     setQuitButton("disabled");
-    setGoBackButton("disabled")
+    setGoBackButton("disabled");
     setNavButton("disabled");
-    setStart(false)
+    setStart(false);
+
+    // If else case for whether the user gave up on the first turn
+    if (poly[0] !== undefined) {
+      console.log("Quit: poly[0]", poly[0]);
+      setCenter(poly[0]);
+    } else {
+      console.log("Quit: center", center);
+      setCenter(center);
+    }
 
     // update county & village props
     findCounty();
@@ -118,7 +119,7 @@ function App(props) {
     setCenter(poly[0]);
 
     // update county & village props
-    findCounty()
+    findCounty();
   }
 
   // open or close modal dialog
@@ -142,11 +143,11 @@ function App(props) {
       setInfoEnabled(true);
 
       // reset buttons to replay game if desired
-      setStartButton("")
-      setNavButton("disabled")
-      setGuessButton("disabled")
-      setGoBackButton("disabled")
-      setQuitButton("disabled")
+      setStartButton("");
+      setNavButton("disabled");
+      setGuessButton("disabled");
+      setGoBackButton("disabled");
+      setQuitButton("disabled");
 
       // close modal
       modalUpdater();
@@ -154,49 +155,47 @@ function App(props) {
     }
   }
 
-
   // Moves the center markers coordinates around the map
   function movementHandle(direction) {
-      let coordinates = [];
-      // Adjusts coordinates given whatever the entered direction was
-      switch(direction) {
-        // Adjusts score and coordinates
-        case "North":
-          setScore(score - 1)
-          coordinates = [center[0] + .02, center[1]]
-          break;
-        case "South":
-          setScore(score - 1)
-          coordinates = [center[0] - .02, center[1]]
-          break;
-        case "East":
-          setScore(score - 1)
-          coordinates = [center[0], center[1] + .02]
-          break;
-        case "West":
-          setScore(score - 1)
-          coordinates = [center[0], center[1] - .02]
-          break;
-        default:
-          console.log("Uh oh");     
-      }
+    let coordinates = [];
+    // Adjusts coordinates given whatever the entered direction was
+    switch (direction) {
+      // Adjusts score and coordinates
+      case "North":
+        setScore(score - 1);
+        coordinates = [center[0] + 0.02, center[1]];
+        break;
+      case "South":
+        setScore(score - 1);
+        coordinates = [center[0] - 0.02, center[1]];
+        break;
+      case "East":
+        setScore(score - 1);
+        coordinates = [center[0], center[1] + 0.02];
+        break;
+      case "West":
+        setScore(score - 1);
+        coordinates = [center[0], center[1] - 0.02];
+        break;
+      default:
+        console.log("Uh oh");
+    }
 
-      if (coordinates !== []) {
-        // Takes old poly array and pushes the coordinates to it
-        setPoly(poly => [...poly, coordinates])
-        // Recenters the marker
-        setCenter(coordinates)   
-      }
-      else {
-        return null
-      }  
+    if (coordinates !== []) {
+      // Takes old poly array and pushes the coordinates to it
+      setPoly((poly) => [...poly, coordinates]);
+      // Recenters the marker
+      setCenter(coordinates);
+    } else {
+      return null;
+    }
   }
 
+  // Colors line maroon!
   const maroonOptions = { color: "maroon" };
 
   return (
     <div id="body">
-      
       {/* menu buttons */}
       <div id="menu">
         <h3>Menu</h3>
@@ -221,18 +220,20 @@ function App(props) {
         handleAnswer={handleAnswer}
         answer={answer}
       />
-      {/* map component */}
       <div>
-      <h1 id='header'>GEO-VERMONTER</h1>
+        <h1 id="header">GEO-VERMONTER</h1>
+        {/* map component */}
         <Map
           center={center}
           positions={poly}
           pathOptions={maroonOptions}
           zoom={zoom}
           start={start}
-          setCenter={setCenter}  
+          setCenter={setCenter}
         />
-        <Info id="info-panel"
+        {/* info component */}
+        <Info
+          id="info-panel"
           score={score}
           lat={center[0]}
           long={center[1]}
@@ -242,32 +243,33 @@ function App(props) {
         />
       </div>
 
+      {/* nav component */}
       <div id="nav">
-      <h3>Movement</h3>
-      <MovementButton
-        disabled={navButton}
-        findCounty={findCounty}
-        movementHandle={movementHandle}
-        direction="North"
-      />
-      <MovementButton
-        disabled={navButton}
-        findCounty={findCounty}
-        movementHandle={movementHandle}
-        direction="South"
-      />
-      <MovementButton
-        disabled={navButton}
-        findCounty={findCounty}
-        movementHandle={movementHandle}
-        direction="East"
-      />
-      <MovementButton
-        disabled={navButton}
-        findCounty={findCounty}
-        movementHandle={movementHandle}
-        direction="West"
-      />
+        <h3>Movement</h3>
+        <MovementButton
+          disabled={navButton}
+          findCounty={findCounty}
+          movementHandle={movementHandle}
+          direction="North"
+        />
+        <MovementButton
+          disabled={navButton}
+          findCounty={findCounty}
+          movementHandle={movementHandle}
+          direction="South"
+        />
+        <MovementButton
+          disabled={navButton}
+          findCounty={findCounty}
+          movementHandle={movementHandle}
+          direction="East"
+        />
+        <MovementButton
+          disabled={navButton}
+          findCounty={findCounty}
+          movementHandle={movementHandle}
+          direction="West"
+        />
       </div>
     </div>
   );

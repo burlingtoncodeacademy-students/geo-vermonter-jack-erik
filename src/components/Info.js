@@ -1,6 +1,8 @@
 import React from "react";
 
 function Info(props) {
+
+  {/* Displays/Hides correct information depending on the state of the game */}
   if (props.infoEnabled) {
     return (
       <div id="info-display">

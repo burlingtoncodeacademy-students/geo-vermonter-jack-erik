@@ -3,39 +3,30 @@ import borderData from "../data/border";
 import ChangeView from "./ChangeView";
 import leafletPip from "@mapbox/leaflet-pip"
 import L from "leaflet";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 
 function Map(props) {
   let vtOutline = borderData.geometry.coordinates[0].map(coords => [coords[1], coords[0]])
 
+  let newLat = props.center[0];
+  let newLon = props.center[1];
 
-  const [newLat, setNewLat] = useState(props.center[0]);
-  const [newLon, setNewLon] = useState(props.center[1]);
+  let newLatLon = [];
 
+  useEffect(() => {
+    let vtData = L.geoJSON(borderData);
+    leafletPip.bassackwards = true;
 
-  // useEffect(() => {
-  //   let vtData = L.geoJSON(borderData);
-  //   leafletPip.bassackwards = true;
+    let results = leafletPip.pointInLayer(newLatLon, vtData, true)
 
-  //   console.log(vtData);
-
-  //   let results = leafletPip.pointInLayer(props.center, vtData);
-
-  //   setNewLat(Math.random() * (45.005419 - 42.730315) + 42.730315);
-  //   setNewLon(Math.random() * (-71.510225 - -73.35218) + -73.35218);
-
-  //   if (!props.start) {
-  //     props.setCenter([newLat, newLon]);
-  //   }
-
-  //   while(!vtData.getBounds().contains(props.center)) {
-  //     setNewLat(Math.random() * (45.005419 - 42.730315) + 42.730315);
-  //     setNewLon(Math.random() * (-71.510225 - -73.35218) + -73.35218);
-  //     results = leafletPip.pointInLayer(props.center, vtData)
-  //     console.log("results: " + results);
-  //     props.setCenter([newLat, newLon]);
-  //   }
-  // }, [])
+    while(results.length === 0) {
+      newLat = Math.random() * (45.005419 - 42.730315) + 42.730315;
+      newLon = Math.random() * (-71.510225 + 73.35218) - 73.35218;
+      newLatLon = [newLat, newLon];
+      results = leafletPip.pointInLayer(newLatLon, vtData, true)
+    }
+    props.setCenter(newLatLon)
+  }, [])
 
   return (
     <MapContainer id="map-container"
