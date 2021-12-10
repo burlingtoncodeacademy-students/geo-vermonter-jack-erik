@@ -1,51 +1,58 @@
 body {
   margin: 0;
-  
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
+/* header font */
+
 #header {
-  font-family: 'Quattrocento';
+  font-family: "Quattrocento";
 }
 
+/* make map appear behind modal box */
 #map-container {
   z-index: 0;
 }
 
+/* setting background color of page */
 html {
   background-color: rgb(37, 38, 54);
-
 }
 
-#nav, #menu {
+/* align nav and menu components vertically in their div */
+#nav,
+#menu {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+/* rules for main page styling */
 #body {
   width: 100vw;
   height: 100%;
   overflow: hidden;
   padding-top: 1em;
+  /* set display so sub-sections arrange horizontally */
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 1em;
-  font-family: 'Quattrocento Sans';
-  color:white;
+  font-family: "Quattrocento Sans";
+  color: white;
 }
 
+/* styling rules for text that displays geographical information */
 #info-display {
   color: white;
   top: 300px;
@@ -59,6 +66,7 @@ html {
   gap: 0.5em;
 }
 
+/* setting a transparent black background behind modal box */
 #modal-background {
   height: 100vh;
   width: 100vw;
@@ -66,9 +74,10 @@ html {
   top: 0;
   left: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1
+  z-index: 1;
 }
 
+/* modal box styling set to appear in front */
 #modal-box {
   background-color: white;
   color: black;
@@ -76,39 +85,39 @@ html {
   position: absolute;
   left: 35%;
   top: 20%;
-  /* margin-left: -150px; */
-  /* margin-top: -150px; */
   z-index: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align:
-
 }
 
+/* styling for buttons inside modal box */
 .modal-menu {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-h1, h2, h3 {
-  font-family: 'Quattrocento';
+/* header font styling */
+h1,
+h2,
+h3 {
+  font-family: "Quattrocento";
 }
 
+/* main header shadow styling */
 h1 {
-  filter: drop-shadow(1px 2px 1px white)
-
+  filter: drop-shadow(1px 2px 1px white);
 }
 
 label {
   display: inline-block;
-
 }
 input {
   display: inline-block;
 }
 
+/* styling buttons */
 button {
   margin: 1em;
   padding: 0;
@@ -116,33 +125,40 @@ button {
   height: 50px;
   filter: drop-shadow(2px 2px 2px black);
   font-size: 1em;
-  font-family: 'Quattrocento Sans'
+  font-family: "Quattrocento Sans";
 }
 
+/* change button color on hover */
 button:hover {
   background-color: goldenrod;
-} 
+}
 
+/* list styling, removing bullets */
 ul {
   list-style-type: none;
-  padding:0;
-  margin:0;
-}
-li{
   padding: 0;
   margin: 0;
 }
 
+/* removing list item indentation */
+li {
+  padding: 0;
+  margin: 0;
+}
+
+/* styling for header inside modal box */
 #modal-box h2 {
   margin: 0;
   padding: 1em;
-  filter: '';
+  filter: "";
 }
 
+/* styling for list inside modal */
 #modal-box ul {
   padding-bottom: 1em;
 }
 
+/* styling for list item inside modal */
 #modal-box li {
   padding: 0.1em;
 }

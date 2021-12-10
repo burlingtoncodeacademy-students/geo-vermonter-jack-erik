@@ -12,13 +12,13 @@ function App() {
   // prop for opening and closing modal
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  // Stateful array of points traveled to
+  // State array of points traveled to
   const [poly, setPoly] = useState([]);
 
-  // Stateful variable for the zoom value of the map
+  // State for the zoom value of the map
   const [zoom, setZoom] = useState(8);
 
-  // stateful props for tracking county and village
+  // states for tracking county and village
   const [county, setCounty] = useState("");
   const [village, setVillage] = useState("");
 
@@ -42,9 +42,10 @@ function App() {
     setAnswer(evt.target.value);
   }
 
-  // use geocoding to lookup town and county, set them to stateful props
+  // use geocoding to lookup town and county, set them to states
   function findCounty() {
     fetch(
+      // passing current center into openstreetmap url
       "https://nominatim.openstreetmap.org/reverse.php?lat=" +
         center[0] +
         "&lon=" +
@@ -53,10 +54,12 @@ function App() {
     )
       .then((res) => res.json())
       .then((res) => {
+        // setting county and village states with results
         setCounty(res.address.county);
         setVillage(res.address.village);
       })
       .catch((error) => {
+        // error handling
         console.log(error.message);
       });
   }
@@ -135,10 +138,12 @@ function App() {
   function modalSubmit() {
     findCounty();
     if (answer !== county) {
+      // case for incorrect answer
       setScore(score - 10);
       alert("Incorrect answer!");
       setModalIsOpen(false);
     } else {
+      // case for correct answer
       alert(`Correct answer! Final score: ${score}`);
       setInfoEnabled(true);
 
@@ -161,18 +166,22 @@ function App() {
     // Adjusts coordinates given whatever the entered direction was
     switch (direction) {
       // Adjusts score and coordinates
+      // move north
       case "North":
         setScore(score - 1);
         coordinates = [center[0] + 0.02, center[1]];
         break;
+      // move south
       case "South":
         setScore(score - 1);
         coordinates = [center[0] - 0.02, center[1]];
         break;
+      // move east
       case "East":
         setScore(score - 1);
         coordinates = [center[0], center[1] + 0.02];
         break;
+      // move west
       case "West":
         setScore(score - 1);
         coordinates = [center[0], center[1] - 0.02];
@@ -199,6 +208,7 @@ function App() {
       {/* menu buttons */}
       <div id="menu">
         <h3>Menu</h3>
+        {/* props determine functionality and whether button is disabled */}
         <button onClick={startGame} disabled={startButton}>
           Start
         </button>
@@ -214,6 +224,7 @@ function App() {
       </div>
       {/* modal dialog component */}
       <Modal
+        // passing props to update behavior of modal in parent
         modalIsOpen={modalIsOpen}
         modalUpdater={modalUpdater}
         modalSubmit={modalSubmit}
@@ -246,6 +257,7 @@ function App() {
       {/* nav component */}
       <div id="nav">
         <h3>Movement</h3>
+        {/* creating instances of MovementButton for different directions */}
         <MovementButton
           disabled={navButton}
           findCounty={findCounty}
